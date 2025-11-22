@@ -659,12 +659,7 @@ if _is_cuda():
     if envs.VLLM_USE_PRECOMPILED or get_nvcc_cuda_version() >= Version("12.3"):
         # FA3 requires CUDA 12.3 or later
         ext_modules.append(CMakeExtension(name="vllm.vllm_flash_attn._vllm_fa3_C"))
-        # Optional since this doesn't get built (produce an .so file) when
-        # not targeting a hopper system
-        ext_modules.append(CMakeExtension(name="vllm._flashmla_C", optional=True))
-        ext_modules.append(
-            CMakeExtension(name="vllm._flashmla_extension_C", optional=True)
-        )
+        # FlashMLA skipped on sm<90 (patched by setup-vllm-bleeding.py)
 
 if _build_custom_ops():
     ext_modules.append(CMakeExtension(name="vllm._C"))
